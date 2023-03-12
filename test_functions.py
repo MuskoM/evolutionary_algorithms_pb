@@ -1,0 +1,13 @@
+def spherical():
+    ...
+
+def rastagin():
+    ...
+
+def griewank():
+    ...
+
+def rosenbrock():
+    ...
+
+def ackley()
