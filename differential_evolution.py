@@ -1,27 +1,43 @@
 import numpy as np
+import typing as t
 
 class DifferentialEvolution:
 
-    def __init__(self, population=12, diff_weight = 0.8):
+    def __init__(
+            self,
+            mutation_func,
+            test_func,
+            population=12,
+            diff_weight = 0.8,
+            iterations = 10
+            ):
         self.F = diff_weight
+        self.number_of_solutions = population
         self.solutions = []
+        self.number_of_iterations = iterations
+
+        self.mutate = mutation_func
+        self.test = test_func
         self.best = None
         self.best_vector = None
-        self.number_of_solutions = population
+
         for i in range(self.number_of_solutions):
+            # size of vector should be defined by a test function or param?
             solution = np.random.normal(size=5)
             self.solutions.append(solution)
 
+
     def run(self):
-        for indx, curr_solution in enumerate(self.solutions):
-            if indx == 0:
-                self.best = self.sphere_function(curr_solution)
-            a,b,c = self.get_candidates(indx)
-            mutation = self.mutate(a,b,c)
-            new_value = self.sphere_function(mutation)
-            if new_value < self.best:
-                self.best = new_value
-                self.best_vector = mutation
+        for _ in range(self.number_of_iterations):
+            for indx, curr_solution in enumerate(self.solutions):
+                if indx == 0:
+                    self.best = self.test(curr_solution)
+                a,b,c = self.get_candidates(indx)
+                mutation = self.mutate(self.F, a,b,c)
+                new_value = self.test(mutation)
+                if new_value < self.best:
+                    self.best = new_value
+                    self.best_vector = mutation
 
 
     def get_candidates(self, curr_solution_indx: int):
@@ -34,9 +50,3 @@ class DifferentialEvolution:
             candidates.append(self.solutions[random_num])
             selected_indxs.append(random_num)
         return candidates
-    
-    def mutate(self, a, b, c):
-        return a * self.F * (b - c)
-    
-    def sphere_function(self, vec: np.ndarray):
-        return (vec**2).sum()
