@@ -24,7 +24,7 @@ class DifferentialEvolution:
 
         for i in range(self.number_of_solutions):
             # size of vector should be defined by a test function or param?
-            solution = np.random.normal(size=5)
+            solution = np.random.normal(size=2)
             self.solutions.append(solution)
 
 

@@ -7,7 +7,7 @@ if __name__ == '__main__':
     algorithm = de.DifferentialEvolution(
         population=12,
         iterations=100,
-        test_func=test.spherical,
+        test_func=test.ackley,
         mutation_func=mut.de_best_2
     )
 
