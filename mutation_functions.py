@@ -1,22 +1,21 @@
 from numpy import ndarray, float32
 
-def rand1bin(F: float32, a: ndarray, b: ndarray, c: ndarray):
-    return a * F * (b - c)
+# DE/rand/1
+def de_rand_1(F: float32, a: ndarray, b: ndarray, c: ndarray):
+    return a + F * (b - c)
 
-def rand1exp():
-    ...
+# DE/rand/2
+def de_rand_2(F: float32, a: ndarray, b: ndarray, c: ndarray, d: ndarray, e: ndarray):
+    return a + F * (b - c) + F * (d - e)
 
-def rand2bin():
-    ...
+# DE/best/1
+def de_best_1(F: float32, best: ndarray, a: ndarray, b: ndarray):
+    return best + F * (a - b)
 
-def best1bin():
-    ...
-
-def best2bin(F: float32, best: ndarray, a: ndarray, b: ndarray, c:ndarray, d:ndarray):
+# DE/best/2
+def de_best_2(F: float32, best: ndarray, a: ndarray, b: ndarray, c:ndarray, d:ndarray):
     return best + F * (a - b) + F * (c - d)
 
-def best2exp():
-    ... 
 
-def current1bin(F: float32, i: ndarray, a: ndarray, b: ndarray):
-    return i + F * (a - b)
+ 
+

@@ -8,7 +8,7 @@ if __name__ == '__main__':
         population=12,
         iterations=100,
         test_func=test.spherical,
-        mutation_func=mut.rand1bin
+        mutation_func=mut.de_best_2
     )
 
     algorithm.run()
