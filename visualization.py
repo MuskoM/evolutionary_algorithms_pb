@@ -1,8 +1,10 @@
 import typing as t
 from datetime import datetime
 from pathlib import Path
+from argparse import ArgumentParser
 
 import numpy as np
+import pandas as pd
 
 import matplotlib.pyplot as plt
 import matplotlib
@@ -13,6 +15,8 @@ from matplotlib.text import Annotation
 
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+
+import seaborn as se
 
 from metrics import Metrics
 
@@ -41,6 +45,14 @@ def _annotate3D(ax, text, xyz, *args, **kwargs):
 
 setattr(Axes3D, 'annotate3D', _annotate3D)
 
+class OutputVizualizer:
+    def __init__(self) -> None:
+        pass
+
+    def plot_file(self, file_path, group_by):
+        df = pd.read_csv(file_path, sep=';')
+        plot = se.lineplot(df, x='Iteration', y='Value', hue=group_by)
+        plt.show()
 
 class Visualize():
     def __init__(self, function: t.Callable, mutation: t.Callable):
@@ -94,3 +106,14 @@ class Visualize():
               textcoords='offset points',
               arrowprops=dict(ec='black', fc='white', shrink=1.5))
         plt.show()
+
+if __name__ == '__main__':
+    argument_parser = ArgumentParser()
+    argument_parser.add_argument('file')
+    argument_parser.add_argument('-g', '--group_by', required=True)
+
+    arguments = argument_parser.parse_args()
+
+    visualizer = OutputVizualizer()
+    visualizer.plot_file(arguments.file, arguments.group_by)
+

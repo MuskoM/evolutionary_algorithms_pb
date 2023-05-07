@@ -37,7 +37,6 @@ if __name__ == '__main__':
 
     input_args = argument_parser.parse_args()
 
-    population = 6
     algorithm = de.DifferentialEvolution(
         population=int(input_args.population),
         iterations=int(input_args.iteration),
@@ -66,4 +65,4 @@ if __name__ == '__main__':
     # vis.plot_history(algorithm.iteration_values)
     
     metrics = Metrics(algorithm) 
-    metrics.log(input_args.log_by, getattr(input_args, input_args.log_by))
+    metrics.log(input_args.log_by)

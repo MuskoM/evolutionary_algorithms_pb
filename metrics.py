@@ -19,15 +19,14 @@ class Metrics:
         if not self.fig_path.exists():
             self.fig_path.mkdir(parents=True)
 
-    def log(self, log_by, value):
+    def log(self, log_by):
         timestamp = datetime.now().strftime(r'%y%m%d%H%M%S')
-        dest = self.fig_path.joinpath(log_by)
+        dest = self.fig_path
         if not dest.exists():
             dest.mkdir()
-        with open(dest.joinpath(str(value)+'.csv'),'+a') as file:
-            file.write('Iteration;Value;Population;Vector_len;Test;Mutation\n')
+        file = dest.joinpath(str(log_by)+'.csv')
+        with open(file,'+a') as f:
+            if file.stat().st_size == 0:
+                f.write('Iteration;Value;Population;Vector_len;Test;Mutation\n')
             for i, v in enumerate(self.algorithm.iteration_values):
-                file.write(f'{i};{v};{self.algorithm.number_of_solutions}{self.algorithm.vector_len};{self.test_function_name};{self.mutation_strategy_name}\n')
-
-    def plot_log(self):
-        df = pd.read_csv(self.fig_path.joinpath('tested_value.csv'))
+                f.write(f'{i};{v};{self.algorithm.number_of_solutions};{self.algorithm.vector_len};{self.test_function_name};{self.mutation_strategy_name}\n')
