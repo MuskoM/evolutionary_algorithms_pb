@@ -1,4 +1,7 @@
 import typing as t
+from datetime import datetime
+from pathlib import Path
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -10,6 +13,8 @@ from matplotlib.text import Annotation
 
 from mpl_toolkits.mplot3d.proj3d import proj_transform
 from mpl_toolkits.mplot3d.axes3d import Axes3D
+
+from metrics import Metrics
 
 import PySide6.QtCore
 
@@ -38,7 +43,13 @@ setattr(Axes3D, 'annotate3D', _annotate3D)
 
 
 class Visualize():
-    def __init__(self, function: t.Callable):
+    def __init__(self, function: t.Callable, mutation: t.Callable):
+        self.test_func = function
+        self.test_function_name = function.__name__
+        self.mutation_strategy_name = mutation.__name__
+        self.fig_path = Path('runs')
+
+    def _construct_test_plot(self):
         self.fig, self.ax = plt.subplots(subplot_kw={"projection": "3d"})
 
         # Make data.
@@ -48,12 +59,10 @@ class Visualize():
         Z = np.ndarray(shape=(len(X_arr), len(Y_arr)))
         for ix, x in enumerate(X_arr):
             for iy, y in enumerate(Y_arr):
-                Z[ix][iy] = function([x,y])
-        
+                Z[ix][iy] = self.test_func([x,y])
         # Plot the surface.
         surf = self.ax.plot_surface(X, Y, Z, cmap=cm.coolwarm,
                             linewidth=0, antialiased=False)
-
         # Customize the z axis.
         self.ax.zaxis.set_major_locator(LinearLocator(10))
         # A StrMethodFormatter is used automatically
@@ -62,7 +71,24 @@ class Visualize():
         # Add a color bar which maps values to colors.
         self.fig.colorbar(surf, shrink=0.5, aspect=5)
 
+    def plot_history(self, values):
+        X = np.arange(0, len(values), 1)
+        plt.plot(X, values)
+        plt.title('Values per iteration')
+        plt.xlabel('Iteration')
+        plt.ylabel('Best value')
+
+        save_to = self.fig_path.joinpath(self.test_function_name)
+        
+        if not save_to.exists():
+            save_to.mkdir(parents=True)
+        timestamp = datetime.now().strftime(r'%y%m%d%H%M%S')
+
+        plt.savefig(save_to.joinpath(timestamp+'_'+self.mutation_strategy_name+'.jpg'))
+        
+
     def show_best(self, coords):
+        self._construct_test_plot()
         self.ax.annotate3D('Calc. Min', coords,
               xytext=(-30, -30),
               textcoords='offset points',

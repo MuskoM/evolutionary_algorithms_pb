@@ -10,28 +10,31 @@ class DifferentialEvolution:
             test_func,
             population=12,
             diff_weight = 0.8,
-            iterations = 10
+            iterations = 10,
+            vector_len = 4,
             ):
         self.F = diff_weight
         self.number_of_solutions = population
         self.solutions = []
         self.number_of_iterations = iterations
+        self.vector_len = vector_len
 
         self.mutate = mutation_func
         self.test = test_func
         self.best = None
         self.best_vector = None
+        self.iteration_values = []
 
         for i in range(self.number_of_solutions):
             # size of vector should be defined by a test function or param?
-            solution = np.random.normal(size=2)
+            solution = np.random.normal(size=self.vector_len)
             self.solutions.append(solution)
 
 
     def run(self):
-        for _ in range(self.number_of_iterations):
+        for iteration in range(self.number_of_iterations):
             for indx, curr_solution in enumerate(self.solutions):
-                if indx == 0:
+                if indx == 0 and iteration == 0 :
                     self.best = self.test(curr_solution)
                     self.best_vector = curr_solution
                 candidates = self.get_candidates(indx, self.mutate)
@@ -40,6 +43,7 @@ class DifferentialEvolution:
                 if new_value < self.best:
                     self.best = new_value
                     self.best_vector = mutation
+            self.iteration_values.append(0.0 - self.best)
 
 
     def get_candidates(self, curr_solution_indx: int, function: t.Callable):
