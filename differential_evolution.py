@@ -35,7 +35,7 @@ class DifferentialEvolution:
         for iteration in range(self.number_of_iterations):
             for indx, curr_solution in enumerate(self.solutions):
                 if indx == 0 and iteration == 0 :
-                    self.best = self.test(curr_solution)
+                    self.best = abs(0.0 - self.test(curr_solution))
                     self.best_vector = curr_solution
                 candidates = self.get_candidates(indx, self.mutate)
                 mutation = self.mutate(self.F, *candidates)

@@ -11,8 +11,8 @@
             "program": "${file}",
             "console": "integratedTerminal",
             "justMyCode": true,
-            // "args": ["--log_by", "population", "-p", "100"]
-            "args": ["runs/test_function.csv", "--group_by", "-p", "100"]
+            "args": ["--log_by", "population", "-p", "100"]
+            // "args": ["runs/test_function.csv", "--group_by", "-p", "100"]
         }
     ]
 }
