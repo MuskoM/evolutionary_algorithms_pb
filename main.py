@@ -61,7 +61,6 @@ if __name__ == '__main__':
     print(f'History: {algorithm.iteration_values}')
 
     vis = Visualize(getattr(test, input_args.test), getattr(mut, input_args.mutation))
-    # vis.show_best([*algorithm.best_vector[:2],algorithm.best])
     # vis.plot_history(algorithm.iteration_values)
     
     metrics = Metrics(algorithm) 

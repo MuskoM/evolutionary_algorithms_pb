@@ -40,10 +40,11 @@ class DifferentialEvolution:
                 candidates = self.get_candidates(indx, self.mutate)
                 mutation = self.mutate(self.F, *candidates)
                 new_value = self.test(mutation)
-                if new_value < self.best:
-                    self.best = new_value
+                loss = abs(0.0 - new_value)
+                if loss < self.best:
+                    self.best = loss
                     self.best_vector = mutation
-            self.iteration_values.append(0.0 - self.best)
+            self.iteration_values.append(self.best)
 
 
     def get_candidates(self, curr_solution_indx: int, function: t.Callable):
