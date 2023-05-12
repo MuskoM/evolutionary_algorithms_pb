@@ -12,10 +12,19 @@ MUTATION_FUNCTIONS = [fun[0] for fun in inspect.getmembers(mut, inspect.isfuncti
 
 if __name__ == '__main__':
 
-    argument_parser = ArgumentParser('Differential Evolutjion')
+    argument_parser = ArgumentParser('Differential Evolution')
     argument_parser.add_argument(
         '-p', '--population', default=12, help='Number of samples in population'
+    )    
+    
+    argument_parser.add_argument(
+        '-f', '--factor', default=0.5, help='Amplification factor'
     )
+
+    argument_parser.add_argument(
+        '-c', '--crossover', default=0.1, help='Crossover constant'
+    )
+
     argument_parser.add_argument(
         '-i', '--iteration', default=100, help='Number of iterations for the algorithm'
     )
@@ -42,7 +51,9 @@ if __name__ == '__main__':
         iterations=int(input_args.iteration),
         test_func=getattr(test, input_args.test),
         mutation_func=getattr(mut, input_args.mutation),
-        vector_len=int(input_args.vector_length)
+        vector_len=int(input_args.vector_length),
+        diff_weight=float(input_args.factor),
+        cross_const=float(input_args.crossover)
     )
 
     print('===Running Differential Evolution===')
@@ -63,5 +74,5 @@ if __name__ == '__main__':
     vis = Visualize(getattr(test, input_args.test), getattr(mut, input_args.mutation))
     # vis.plot_history(algorithm.iteration_values)
     
-    metrics = Metrics(algorithm) 
-    metrics.log(input_args.log_by)
+    # metrics = Metrics(algorithm) 
+    # metrics.log(input_args.log_by)

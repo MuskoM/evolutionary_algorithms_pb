@@ -1,6 +1,7 @@
 import numpy as np
 import inspect 
 import typing as t
+import random as rnd
 
 class DifferentialEvolution:
 
@@ -9,11 +10,13 @@ class DifferentialEvolution:
             mutation_func,
             test_func,
             population=12,
-            diff_weight = 0.8,
+            diff_weight = 0.5,
             iterations = 10,
             vector_len = 4,
+            cross_const = 0.1,
             ):
         self.F = diff_weight
+        self.cr = cross_const
         self.number_of_solutions = population
         self.solutions = []
         self.number_of_iterations = iterations
@@ -39,7 +42,8 @@ class DifferentialEvolution:
                     self.best_vector = curr_solution
                 candidates = self.get_candidates(indx, self.mutate)
                 mutation = self.mutate(self.F, *candidates)
-                new_value = self.test(mutation)
+                test_solution = self.crossover(curr_solution, mutation)
+                new_value = self.test(test_solution)
                 loss = abs(0.0 - new_value)
                 if loss < self.best:
                     self.best = loss
@@ -63,3 +67,14 @@ class DifferentialEvolution:
             candidates[0] = self.best_vector
 
         return candidates
+    
+    def crossover(self, parent, mutation):
+        d = rnd.randint(0, len(mutation)-1)
+        result = []
+        for j in range(len(parent)):
+            cur_rnd = rnd.uniform(0.0, 1.0)
+            if cur_rnd < self.cr or j == d:
+                result.append(mutation[j])
+            else:
+                result.append(parent[j])
+        return result
